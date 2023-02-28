@@ -15,9 +15,10 @@
     gap:1rem;
 }
 
-span{
+p{
     font-family:'Lobster','Arial';
 	font-size:20px;
+	text-transform:capitalize;
 }
 
 #img-pokemon{

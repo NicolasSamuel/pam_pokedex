@@ -3,32 +3,37 @@ const fundo = document.querySelector(".fundo");
 
 
 
-async function gerarPokemon(){
-    try{
-        let requisicoes = await fetch('https://pokeapi.co/api/v2/pokemon?limit=151&offset=0');
-        let pokeInfo = await requisicoes.json();
+async function listar() {
+    try {
+        let requisicao = await fetch('https://pokeapi.co/api/v2/pokemon?limit=151&offset=0');
+        let resultado = await requisicao.json();
 
-        for(let index=0 ;index < 151;index++){
-        let pokemon = await pokeInfo.results[index].name;
+        let name = resultado.results[0].name;
+
+        resultado.results.forEach(async element => {
+            let name = element.name;
+
+            try {
+                let requisicao2 = await fetch(`https://pokeapi.co/api/v2/pokemon/${name}`);
+                let resultado2 = await requisicao2.json();
+                
+                fundo.innerHTML += `
+                <div class="pokemon">
+                    <p>${name}</p>
+                    <a href="detalhes.html?id=${resultado2.id}"><img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${resultado2.id}.png" id="img-pokemon"></a>
+                </div>`;
+                    
+            }
+            catch {
+    
+            }
+        });
+
         
-        let fotos = (`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${index+1}.png`);
-        fundo.innerHTML += `
-            <div class="pokemon" onclick='abrirInformacoes()'>
-                <span>${pokemon}</span>
-                <img src=${fotos} id="img-pokemon">    
-            </div>             
-        `
-        }
-}catch(erro){
-    alert("Servidor indisponivel")
+    } catch (erro) {
+        alert("servidor indisponivel")
+    }
 }
-}
-gerarPokemon();
-// addeventilistiner (click,){
 
-// window.open();
-// // // https://pokeapi.co/api/v2/pokemon/ para puxar os atributos do pokemon
-// }
-// const urlParams = new URLSearchParams(window.location.search); para saber qual pokemon que peguei 
-// const products = urlParams.get("produtos") // livros
-// const author = urlParams.get("autor")
+
+listar();
